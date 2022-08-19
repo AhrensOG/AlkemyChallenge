@@ -15,6 +15,25 @@ const currentBalance = async (req, res) => {
     }
 }
 
+const addOperations = async (req, res) => {
+    try {
+        let { concept, amount, date, type } = req.body;
+        if (concept && amount && date && type) {
+            type === 'egress' ? amount = -amount : amount
+            const operation = await Operation.create({
+                concept,
+                amount,
+                date,
+                type
+            })
+            return res.status(200).json({'Operation successfully created': operation})
+        } 
+        return res.status(400).json('Missing Data')
+    } catch (e) {
+        res.status(400).send({ data: e.message })
+    }
+}
+
 module.exports = {
     currentBalance,
     addOperations,
