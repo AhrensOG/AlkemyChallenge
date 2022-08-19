@@ -29,6 +29,22 @@ const tenRegisteredOperations = async (req, res) => {
     }
 }
 
+const allOperations = async (req, res) => {
+    try {
+        const { type } = req.query;
+        let allOperations;
+        type ? (allOperations = await Operation.findAll({
+            where: {
+                type
+            }
+        }))
+        : res.status(400).send('Missing Data')
+        res.status(200).json(allOperations)
+    } catch (e) {
+        res.status(400).send({ data: e.message })
+    }
+}
+
 const addOperations = async (req, res) => {
     try {
         let { concept, amount, date, type } = req.body;
@@ -52,4 +68,5 @@ module.exports = {
     currentBalance,
     addOperations,
     tenRegisteredOperations,
+    allOperations,
 }
