@@ -17,12 +17,8 @@ const currentBalance = async (req, res) => {
 
 const tenRegisteredOperations = async (req, res) => {
     try {
-        const operations = await Operation.findAll({
-            order: [
-                ['id', 'DESC']
-            ]
-        })
-        operations.length > 10 ? operations.length = 10 : operations
+        const operations = await Operation.findAll()
+        operations.length > 10 ? operations.reverse().length = 10 : operations.reverse()
         res.status(200).json(operations)
     } catch (e) {
         res.status(400).send({ data: e.message })
@@ -64,9 +60,31 @@ const addOperations = async (req, res) => {
     }
 }
 
+const updateOperation = async (req, res) => {
+    try {
+        let { idOp, concept, amount, date } = req.body;
+        if(!idOp) res.status(400).send('Missing Data')
+        const id = Number(idOp)
+
+        const operation = await Operation.findByPk(id)
+        operation.type === 'egress' ? amount = -amount : amount
+
+        concept && await Operation.update({ concept },{ where: { id } })
+        amount && await Operation.update({ amount },{ where: { id } })      
+        date && await Operation.update({ date },{ where: { id } })           
+
+        const updated = await Operation.findByPk(id);
+
+        res.status(200).json({'Operation updated successfully': updated})
+    } catch (e) {
+        res.status(400).send({ data: e.message })
+    }
+}
+
 module.exports = {
     currentBalance,
     addOperations,
     tenRegisteredOperations,
     allOperations,
+    updateOperation
 }
