@@ -15,6 +15,20 @@ const currentBalance = async (req, res) => {
     }
 }
 
+const tenRegisteredOperations = async (req, res) => {
+    try {
+        const operations = await Operation.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        operations.length > 10 ? operations.length = 10 : operations
+        res.status(200).json(operations)
+    } catch (e) {
+        res.status(400).send({ data: e.message })
+    }
+}
+
 const addOperations = async (req, res) => {
     try {
         let { concept, amount, date, type } = req.body;
@@ -37,4 +51,5 @@ const addOperations = async (req, res) => {
 module.exports = {
     currentBalance,
     addOperations,
+    tenRegisteredOperations,
 }
