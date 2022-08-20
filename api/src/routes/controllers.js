@@ -43,7 +43,7 @@ const allOperations = async (req, res) => {
 
 const operationsByCategory = async (req, res) => {
     try {
-        const { category } = req.query;
+        const category = req.query.category.toLowerCase();
         if(!category) return res.status(400).send('Missing Data')
         const operations = await Operation.findAll({ where: { category } })
         operations ? res.status(200).json(operations) : res.status(200).json('Operations not found')
@@ -54,14 +54,16 @@ const operationsByCategory = async (req, res) => {
 
 const addOperations = async (req, res) => {
     try {
-        let { concept, amount, date, type } = req.body;
+        let { concept, amount, date, type, category } = req.body;
+        category = category.toLowerCase()
         if (concept && amount && date && type) {
             type === 'egress' ? amount = -amount : amount
             const operation = await Operation.create({
                 concept,
                 amount,
                 date,
-                type
+                type,
+                category
             })
             return res.status(200).json({'Operation successfully created': operation})
         } 
