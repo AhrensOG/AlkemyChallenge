@@ -41,6 +41,17 @@ const allOperations = async (req, res) => {
     }
 }
 
+const operationsByCategory = async (req, res) => {
+    try {
+        const { category } = req.query;
+        if(!category) return res.status(400).send('Missing Data')
+        const operations = await Operation.findAll({ where: { category } })
+        operations ? res.status(200).json(operations) : res.status(200).json('Operations not found')
+    } catch (e) {
+        return res.status(400).send({ data: e.message })
+    }
+}
+
 const addOperations = async (req, res) => {
     try {
         let { concept, amount, date, type } = req.body;
@@ -99,5 +110,6 @@ module.exports = {
     tenRegisteredOperations,
     allOperations,
     updateOperation,
-    deleteOperation
+    deleteOperation,
+    operationsByCategory
 }
