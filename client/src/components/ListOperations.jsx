@@ -6,17 +6,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getTenRegisteredOperatons } from '../actions';
+import { deleteOperation, getCurrentBalance, getTenRegisteredOperatons } from '../actions';
+import { Link } from 'react-router-dom';
 
 export default function ListOperations() {
     const operations = useSelector(state => state.operations)
-
+    const responseApi = useSelector(state => state.responseApi)
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(getTenRegisteredOperatons())
-    }, [dispatch])
+      dispatch(getTenRegisteredOperatons())
+    }, [dispatch])    
+
+    const handleDelete = (e) => {
+      e.preventDefault()
+      dispatch(deleteOperation(e.target.value))
+      dispatch(getCurrentBalance())
+    }
     
   return (
     <TableContainer component={Paper}>
@@ -28,6 +37,8 @@ export default function ListOperations() {
             <TableCell align="right">Date</TableCell>
             <TableCell align="right">Type</TableCell>
             <TableCell align="right">Category</TableCell>
+            <TableCell align="right">Actions</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,6 +52,12 @@ export default function ListOperations() {
               <TableCell align="right">{op.date}</TableCell>
               <TableCell align="right">{op.type}</TableCell>
               <TableCell align="right">{op.category}</TableCell>
+              <TableCell align="right"> 
+                <Link to={`/updateOperation/${op.id}`}>
+                  <Button variant='outlined' >Update</Button>
+                </Link>
+                <Button value={op.id} variant='outlined' onClick={e => handleDelete(e)}>Delete</Button> 
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
