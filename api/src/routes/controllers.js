@@ -81,10 +81,23 @@ const updateOperation = async (req, res) => {
     }
 }
 
+const deleteOperation = async (req, res) => {
+    try {
+        let { idOp } = req.body;
+        if(!idOp) res.status(400).send('Missing Data')
+        const operation = await Operation.findByPk(idOp)
+        operation ? await operation.destroy() : res.status(200).json("Operation already deleted")
+        return res.status(200).json("Operation deleted successfully")
+    } catch (e) {
+        return res.status(400).send({ data: e.message })
+    }
+}
+
 module.exports = {
     currentBalance,
     addOperations,
     tenRegisteredOperations,
     allOperations,
-    updateOperation
+    updateOperation,
+    deleteOperation
 }
