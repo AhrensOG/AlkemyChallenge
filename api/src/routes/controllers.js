@@ -75,8 +75,9 @@ const addOperations = async (req, res) => {
 
 const updateOperation = async (req, res) => {
     try {
+        console.log(req.body)
         let { idOp, concept, amount, date } = req.body;
-        if(!idOp) res.status(400).send('Missing Data')
+        if(!idOp) return res.status(400).send('Missing Data')
         const id = Number(idOp)
 
         const operation = await Operation.findByPk(id)
@@ -88,7 +89,7 @@ const updateOperation = async (req, res) => {
 
         const updated = await Operation.findByPk(id);
 
-        res.status(200).json({'Operation updated successfully': updated})
+        return res.status(200).json({'Operation updated successfully': updated})
     } catch (e) {
         res.status(400).send({ data: e.message })
     }
@@ -96,11 +97,15 @@ const updateOperation = async (req, res) => {
 
 const deleteOperation = async (req, res) => {
     try {
-        let { idOp } = req.body;
-        if(!idOp) res.status(400).send('Missing Data')
+        let { idOp } = req.query;
+        if(!idOp) return res.status(400).send('Missing Data')
         const operation = await Operation.findByPk(idOp)
-        operation ? await operation.destroy() : res.status(200).json("Operation already deleted")
-        return res.status(200).json("Operation deleted successfully")
+        if(operation) {
+            await operation.destroy()
+            return res.status(200).json("Operation deleted successfully")
+        } else {
+            return res.status(200).json("Operation already deleted")
+        }
     } catch (e) {
         return res.status(400).send({ data: e.message })
     }
