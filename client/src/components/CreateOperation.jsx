@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { createOperation } from "../actions";
 import NavBar from "./NavBar";
 
-export default function CreateActivity() {
+export default function CreateOperation() {
     const dispatch = useDispatch()
     const [input, setInput] = useState({
         concept: "",
