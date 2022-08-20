@@ -1,0 +1,1 @@
+export const CURRENT_BALANCE = 'CURRENT_BALANCE'
