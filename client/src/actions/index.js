@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CURRENT_BALANCE, GET_TEN_REGISTERED_OPERATIONS } from './actions';
+import { CURRENT_BALANCE, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS } from './actions';
 
 function createOperation(data) {
     return async (dispatch) => {
@@ -42,8 +42,23 @@ function getTenRegisteredOperatons() {
     } 
 }
 
+function getOperations(type) {
+    return async (dispatch) => {
+        try {
+            const operations = await axios.get(`http://localhost:3001/allOperations?type=${type}`)
+            return dispatch({
+                type: GET_OPERATIONS,
+                payload: operations.data
+            })
+        } catch (error) {
+            
+        }
+    }
+}
+
 export {
     createOperation,
     getCurrentBalance,
-    getTenRegisteredOperatons
+    getTenRegisteredOperatons,
+    getOperations
 }
