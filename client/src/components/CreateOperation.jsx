@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createOperation } from "../actions";
+import NavBar from "./NavBar";
 
 export default function CreateActivity() {
     const dispatch = useDispatch()
@@ -34,6 +35,9 @@ export default function CreateActivity() {
     }
   return (
     <div>
+      <div>
+        <NavBar/>
+      </div>
       <div >
         <form id='form' >
             <TextField name="concept" value={input.concept} onChange={e => handleInputChange(e)} id="outlined-basic" label="Concept" variant="outlined"/>
