@@ -1,4 +1,4 @@
-import { CREATE_OPERATION, CURRENT_BALANCE, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS } from "../actions/actions";
+import { CREATE_OPERATION, CURRENT_BALANCE, DELETE_OPERATION, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS, RESET_RESPONSE_API, UPDATE_OPERATION } from "../actions/actions";
 
 const initialState = {
   currentBalance: 0, 
@@ -10,6 +10,7 @@ function rootReducer(state = initialState, action) {
     case CREATE_OPERATION:
       return {
         ...state,
+        responseApi: action.payload
       }
     case CURRENT_BALANCE:
       return {
@@ -25,6 +26,15 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         operations: action.payload
+      }
+    case DELETE_OPERATION:
+      return {
+        ...state,
+        responseApi: action.payload
+      }
+    case UPDATE_OPERATION:
+      return {
+        ...state,
       }
     default:
       return state;

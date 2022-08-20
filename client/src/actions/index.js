@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CURRENT_BALANCE, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS } from './actions';
+import { CURRENT_BALANCE, DELETE_OPERATION, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS, RESET_RESPONSE_API, UPDATE_OPERATION } from './actions';
 
 function createOperation(data) {
     return async (dispatch) => {
@@ -56,9 +56,38 @@ function getOperations(type) {
     }
 }
 
+function deleteOperation (id) {
+    return async (dispatch) => {
+        try {
+            const res = await axios.delete(`http://localhost:3001/deleteOperation?idOp=${id}`,)
+            return dispatch({
+                type: DELETE_OPERATION,
+                payload: res.data
+            })
+        } catch (e) {
+            alert(e.response.data)
+            
+        }
+    }
+}
+
+function updateOperation(data) {
+    return async (dispatch) => {
+        try {
+            console.log(data)
+            const res = await axios.put(`http://localhost:3001/updateOperation`, data)
+            return res
+        } catch (e) {
+            console.log(e.response.data)
+        }
+    }
+}
+
 export {
     createOperation,
     getCurrentBalance,
     getTenRegisteredOperatons,
-    getOperations
+    getOperations,
+    deleteOperation,
+    updateOperation,
 }
