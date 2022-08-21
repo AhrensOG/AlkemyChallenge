@@ -13,7 +13,7 @@ export default function CurrentBalance() {
   return (
         <div>
             <h2>CURRENT BALANCE</h2>
-            <span>{currentBalance}</span>
+            <h3>{currentBalance}</h3>
         </div>
   );
 }

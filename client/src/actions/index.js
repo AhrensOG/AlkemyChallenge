@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CURRENT_BALANCE, DELETE_OPERATION, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS, RESET_RESPONSE_API, UPDATE_OPERATION } from './actions';
+import { CURRENT_BALANCE, DELETE_OPERATION, GET_OPERATIONS, GET_TEN_REGISTERED_OPERATIONS, RESET_RESPONSE_API, SAVE_TYPE_OPERATION, UPDATE_OPERATION } from './actions';
 
 function createOperation(data) {
     return async (dispatch) => {
@@ -83,6 +83,19 @@ function updateOperation(data) {
     }
 }
 
+function saveTypeOperation(data) {
+    return (dispatch) => {
+        try {
+            return dispatch({
+                type: SAVE_TYPE_OPERATION,
+                payload: data
+            })
+        } catch (e) {
+            
+        }
+    }
+}
+
 export {
     createOperation,
     getCurrentBalance,
@@ -90,4 +103,5 @@ export {
     getOperations,
     deleteOperation,
     updateOperation,
+    saveTypeOperation,
 }

@@ -10,21 +10,32 @@ import Button from '@mui/material/Button';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { deleteOperation, getCurrentBalance, getTenRegisteredOperatons } from '../actions';
+import { deleteOperation, getCurrentBalance, getOperations, getTenRegisteredOperatons } from '../actions';
 import { Link } from 'react-router-dom';
+
+import './style/Buttom.css'
+
 
 export default function ListOperations() {
     const operations = useSelector(state => state.operations)
-    const responseApi = useSelector(state => state.responseApi)
+    const typeOperation = useSelector(state => state.typeOperation)
+
     const dispatch = useDispatch()
     useEffect(() => {
       dispatch(getTenRegisteredOperatons())
     }, [dispatch])    
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
       e.preventDefault()
       dispatch(deleteOperation(e.target.value))
-      dispatch(getCurrentBalance())
+      setTimeout(()=>{
+        dispatch(getCurrentBalance())
+        if(typeOperation === ''){
+          dispatch(getTenRegisteredOperatons())
+        }else {
+          dispatch(getOperations(typeOperation))
+        }
+      },500)
     }
     
   return (
@@ -53,7 +64,7 @@ export default function ListOperations() {
               <TableCell align="right">{op.type}</TableCell>
               <TableCell align="right">{op.category}</TableCell>
               <TableCell align="right"> 
-                <Link to={`/updateOperation/${op.id}`}>
+                <Link className='Link' to={`/updateOperation/${op.id}`}>
                   <Button variant='outlined' >Update</Button>
                 </Link>
                 <Button value={op.id} variant='outlined' onClick={e => handleDelete(e)}>Delete</Button> 

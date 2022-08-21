@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { updateOperation } from "../actions";
 import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
+import './style/Form.css'
 
 export default function UpadateOperation(props) {
     const dispatch = useDispatch()
@@ -42,7 +43,7 @@ export default function UpadateOperation(props) {
         <NavBar/>
       </div>
       <div >
-        <form id='form' >
+        <form className="form" id='form' >
             <TextField name="concept" value={input.concept} onChange={e => handleInputChange(e)} id="outlined-basic" label="Concept" variant="outlined"/>
             <TextField name="amount" value={input.amount} id="outlined-basic" label="Amount" variant="outlined" onChange={e => handleInputChange(e)}/>
             <TextField name="date" value={input.date} id="outlined-basic" label="Date" variant="outlined" onChange={e => handleInputChange(e)}/>
