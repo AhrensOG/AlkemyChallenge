@@ -41,16 +41,29 @@ const allOperations = async (req, res) => {
     }
 }
 
+const operationsByCategory = async (req, res) => {
+    try {
+        const category = req.query.category.toLowerCase();
+        if(!category) return res.status(400).send('Missing Data')
+        const operations = await Operation.findAll({ where: { category } })
+        operations ? res.status(200).json(operations) : res.status(200).json('Operations not found')
+    } catch (e) {
+        return res.status(400).send({ data: e.message })
+    }
+}
+
 const addOperations = async (req, res) => {
     try {
-        let { concept, amount, date, type } = req.body;
+        let { concept, amount, date, type, category } = req.body;
+        category = category.toLowerCase()
         if (concept && amount && date && type) {
             type === 'egress' ? amount = -amount : amount
             const operation = await Operation.create({
                 concept,
                 amount,
                 date,
-                type
+                type,
+                category
             })
             return res.status(200).json({'Operation successfully created': operation})
         } 
@@ -63,10 +76,11 @@ const addOperations = async (req, res) => {
 const updateOperation = async (req, res) => {
     try {
         let { idOp, concept, amount, date } = req.body;
-        if(!idOp) res.status(400).send('Missing Data')
+        if(!idOp) return res.status(400).send('Missing Data')
         const id = Number(idOp)
 
         const operation = await Operation.findByPk(id)
+        if(!operation) return res.status(400).send('Operation not found')
         operation.type === 'egress' ? amount = -amount : amount
 
         concept && await Operation.update({ concept },{ where: { id } })
@@ -75,9 +89,25 @@ const updateOperation = async (req, res) => {
 
         const updated = await Operation.findByPk(id);
 
-        res.status(200).json({'Operation updated successfully': updated})
+        return res.status(200).json({'Operation updated successfully': updated})
     } catch (e) {
         res.status(400).send({ data: e.message })
+    }
+}
+
+const deleteOperation = async (req, res) => {
+    try {
+        let { idOp } = req.query;
+        if(!idOp) return res.status(400).send('Missing Data')
+        const operation = await Operation.findByPk(idOp)
+        if(operation) {
+            await operation.destroy()
+            return res.status(200).json("Operation deleted successfully")
+        } else {
+            return res.status(200).json("Operation already deleted")
+        }
+    } catch (e) {
+        return res.status(400).send({ data: e.message })
     }
 }
 
@@ -86,5 +116,7 @@ module.exports = {
     addOperations,
     tenRegisteredOperations,
     allOperations,
-    updateOperation
+    updateOperation,
+    deleteOperation,
+    operationsByCategory
 }

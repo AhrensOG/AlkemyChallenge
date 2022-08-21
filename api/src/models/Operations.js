@@ -19,6 +19,10 @@ const Operation = sequelize.define(
     type: {
       type: DataTypes.ENUM('entry', 'egress'),
       allowNull: false,
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: true,
     }
   },
   {
