@@ -75,12 +75,12 @@ const addOperations = async (req, res) => {
 
 const updateOperation = async (req, res) => {
     try {
-        console.log(req.body)
         let { idOp, concept, amount, date } = req.body;
         if(!idOp) return res.status(400).send('Missing Data')
         const id = Number(idOp)
 
         const operation = await Operation.findByPk(id)
+        if(!operation) return res.status(400).send('Operation not found')
         operation.type === 'egress' ? amount = -amount : amount
 
         concept && await Operation.update({ concept },{ where: { id } })
