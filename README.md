@@ -10,4 +10,5 @@ How to use this project?
         DB_NAME=alkemyDB
         PORT=3001
 //Documentation in : https://documenter.getpostman.com/view/21377710/VUqpsckC 
+//PD: This was done in 2 days ;D
 ```
